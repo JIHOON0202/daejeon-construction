@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@ViewData["Title"] - 대전시공사 | 어닝 · 데크 전문 시공</title>
+  <meta name="description" content="대전시공사는 어닝, 데크 전문 시공업체입니다. 무료 견적 상담 가능합니다." />
+  <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+  @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container top-inner">
+      <a href="tel:042-222-2222">☎ 042-222-2222 전화상담</a>
+      <a href="https://open.kakao.com/o/sAa6exwi" target="_blank" rel="noopener">💬 카카오톡 상담</a>
+      <a href="https://open.kakao.com/o/sAa6exwi" target="_blank" rel="noopener">카카오톡 오픈채팅 바로가기 ›</a>
+    </div>
+  </div>
+
+  <header class="header">
+    <div class="container nav">
+      <a asp-controller="Home" asp-action="Index" class="logo">⌂ 대전시공사</a>
+      <button class="menu-btn" type="button" aria-label="메뉴 열기">☰</button>
+      <nav class="menu">
+        <a asp-controller="Home" asp-action="Index">홈</a>
+        <a asp-controller="Home" asp-action="Index" asp-fragment="about">회사소개</a>
+        <a asp-controller="Home" asp-action="Index" asp-fragment="services">시공품목</a>
+        <a asp-controller="Works" asp-action="Index">시공사례</a>
+        <a asp-controller="Home" asp-action="Index" asp-fragment="quote">견적문의</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    @RenderBody()
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <h2>⌂ 대전시공사</h2>
+        <p>어닝 · 데크 전문 시공업체</p>
+      </div>
+      <div>
+        <p>대표번호</p>
+        <strong>042-222-2222</strong>
+      </div>
+      <div>
+        <p>카카오톡 상담</p>
+        <a href="https://open.kakao.com/o/sAa6exwi" target="_blank" rel="noopener">오픈채팅 바로가기</a>
+      </div>
+    </div>
+    <p class="copy">COPYRIGHT © 대전시공사 ALL RIGHTS RESERVED.</p>
+  </footer>
+
+  <div class="floating">
+    <a href="tel:042-222-2222">전화</a>
+    <a href="https://open.kakao.com/o/sAa6exwi" target="_blank" rel="noopener">카톡</a>
+  </div>
+
+  <script src="~/js/script.js" asp-append-version="true"></script>
+  @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

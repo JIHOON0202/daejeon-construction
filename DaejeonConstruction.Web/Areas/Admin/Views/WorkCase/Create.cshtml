@@ -1,0 +1,69 @@
+@model WorkCaseFormViewModel
+@{
+    ViewData["Title"] = "시공사례 등록";
+}
+
+<h2 class="mb-4">시공사례 등록</h2>
+
+<div class="card p-4" style="max-width:760px;">
+  <form asp-action="Create" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="All" class="text-danger small mb-2"></div>
+
+    <div class="mb-3">
+      <label asp-for="Title" class="form-label"></label>
+      <input asp-for="Title" class="form-control" />
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label asp-for="Category" class="form-label">분류</label>
+        <select asp-for="Category" class="form-select">
+          <option value="0">어닝</option>
+          <option value="1">데크</option>
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label asp-for="Location" class="form-label"></label>
+        <input asp-for="Location" class="form-control" placeholder="예) 대전 서구" />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label asp-for="Description" class="form-label"></label>
+      <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label asp-for="ThumbnailFile" class="form-label">썸네일 이미지 <span class="text-danger">*</span></label>
+      <input asp-for="ThumbnailFile" type="file" accept="image/*" class="form-control" />
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label asp-for="BeforeImages" class="form-label">시공 전 사진 (여러 장 가능)</label>
+        <input asp-for="BeforeImages" type="file" accept="image/*" multiple class="form-control" />
+      </div>
+      <div class="col-md-6 mb-3">
+        <label asp-for="AfterImages" class="form-label">시공 후 사진 (여러 장 가능)</label>
+        <input asp-for="AfterImages" type="file" accept="image/*" multiple class="form-control" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label asp-for="SortOrder" class="form-label"></label>
+        <input asp-for="SortOrder" class="form-control" />
+      </div>
+      <div class="col-md-6 mb-3 d-flex align-items-end">
+        <div class="form-check">
+          <input asp-for="IsPublished" class="form-check-input" />
+          <label asp-for="IsPublished" class="form-check-label">공개</label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">저장</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">취소</a>
+  </form>
+</div>

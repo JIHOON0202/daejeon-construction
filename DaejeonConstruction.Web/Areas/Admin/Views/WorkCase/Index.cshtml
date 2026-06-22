@@ -1,0 +1,49 @@
+@model List<WorkCase>
+@{
+    ViewData["Title"] = "시공사례관리";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="m-0">시공사례관리</h2>
+  <a asp-action="Create" class="btn btn-primary">+ 시공사례 등록</a>
+</div>
+
+<div class="card p-3">
+  <table class="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th>썸네일</th>
+        <th>분류</th>
+        <th>제목</th>
+        <th>시공지역</th>
+        <th>공개여부</th>
+        <th>등록일</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var w in Model)
+      {
+        <tr>
+          <td><img src="@w.ThumbnailPath" class="thumb-preview" /></td>
+          <td>@w.Category.ToKorean()</td>
+          <td>@w.Title</td>
+          <td>@w.Location</td>
+          <td>@(w.IsPublished ? "공개" : "비공개")</td>
+          <td>@w.CreatedAt.ToString("yyyy-MM-dd")</td>
+          <td class="text-end">
+            <a asp-action="Edit" asp-route-id="@w.Id" class="btn btn-sm btn-outline-secondary">수정</a>
+            <form asp-action="Delete" asp-route-id="@w.Id" method="post" class="d-inline" onsubmit="return confirm('삭제하시겠습니까? 관련 이미지도 함께 삭제됩니다.');">
+              @Html.AntiForgeryToken()
+              <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+            </form>
+          </td>
+        </tr>
+      }
+      @if (!Model.Any())
+      {
+        <tr><td colspan="7" class="text-center text-muted py-4">등록된 시공사례가 없습니다.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

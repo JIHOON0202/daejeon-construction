@@ -1,0 +1,35 @@
+@model WorksIndexViewModel
+@{
+    ViewData["Title"] = "시공사례";
+}
+
+<section class="section works">
+  <div class="container">
+    <div class="title-row">
+      <h2>시공사례</h2>
+    </div>
+
+    <div class="quick-grid" style="grid-template-columns:repeat(3,1fr); margin-bottom:24px;">
+      <a asp-action="Index" class="outline-btn" style="justify-content:center; @(Model.FilterCategory == null ? "background:var(--blue);color:#fff;" : "")">전체</a>
+      <a asp-action="Index" asp-route-category="Awning" class="outline-btn" style="justify-content:center; @(Model.FilterCategory == WorkCategory.Awning ? "background:var(--blue);color:#fff;" : "")">어닝</a>
+      <a asp-action="Index" asp-route-category="Deck" class="outline-btn" style="justify-content:center; @(Model.FilterCategory == WorkCategory.Deck ? "background:var(--blue);color:#fff;" : "")">데크</a>
+    </div>
+
+    <div class="gallery">
+      @if (Model.Items.Count == 0)
+      {
+        <p class="notice">등록된 시공사례가 없습니다.</p>
+      }
+      else
+      {
+        @foreach (var work in Model.Items)
+        {
+          <a class="work-item" style="background-image:url('@work.ThumbnailPath');"
+             asp-action="Details" asp-route-id="@work.Id">
+            <span>[@work.Category.ToKorean()] @work.Title</span>
+          </a>
+        }
+      }
+    </div>
+  </div>
+</section>

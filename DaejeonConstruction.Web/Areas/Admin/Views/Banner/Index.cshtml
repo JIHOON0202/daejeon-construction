@@ -1,0 +1,47 @@
+@model List<MainBanner>
+@{
+    ViewData["Title"] = "배너관리";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="m-0">배너관리</h2>
+  <a asp-action="Create" class="btn btn-primary">+ 배너 등록</a>
+</div>
+
+<div class="card p-3">
+  <table class="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th>썸네일</th>
+        <th>제목</th>
+        <th>정렬순서</th>
+        <th>사용여부</th>
+        <th>수정일</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var b in Model)
+      {
+        <tr>
+          <td><img src="@b.ImagePath" class="thumb-preview" /></td>
+          <td>@b.Eyebrow / @b.Title</td>
+          <td>@b.SortOrder</td>
+          <td>@(b.IsActive ? "사용" : "미사용")</td>
+          <td>@b.UpdatedAt.ToString("yyyy-MM-dd")</td>
+          <td class="text-end">
+            <a asp-action="Edit" asp-route-id="@b.Id" class="btn btn-sm btn-outline-secondary">수정</a>
+            <form asp-action="Delete" asp-route-id="@b.Id" method="post" class="d-inline" onsubmit="return confirm('삭제하시겠습니까?');">
+              @Html.AntiForgeryToken()
+              <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+            </form>
+          </td>
+        </tr>
+      }
+      @if (!Model.Any())
+      {
+        <tr><td colspan="6" class="text-center text-muted py-4">등록된 배너가 없습니다.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,122 @@
+@model WorkCaseFormViewModel
+@{
+    ViewData["Title"] = "시공사례 수정";
+    var beforeImages = Model.ExistingImages.Where(i => i.ImageType == WorkImageType.Before).ToList();
+    var afterImages  = Model.ExistingImages.Where(i => i.ImageType == WorkImageType.After).ToList();
+}
+
+<h2 class="mb-4">시공사례 수정</h2>
+
+<div class="card p-4" style="max-width:760px;">
+  <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="text-danger small mb-2"></div>
+
+    <div class="mb-3">
+      <label asp-for="Title" class="form-label"></label>
+      <input asp-for="Title" class="form-control" />
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label asp-for="Category" class="form-label">분류</label>
+        <select asp-for="Category" class="form-select">
+          <option value="0">어닝</option>
+          <option value="1">데크</option>
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label asp-for="Location" class="form-label"></label>
+        <input asp-for="Location" class="form-control" />
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label asp-for="Description" class="form-label"></label>
+      <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">현재 썸네일</label><br />
+      @if (!string.IsNullOrEmpty(Model.ExistingThumbnailPath))
+      {
+        <img src="@Model.ExistingThumbnailPath" class="thumb-preview" style="width:140px;height:100px;" />
+      }
+    </div>
+    <div class="mb-3">
+      <label asp-for="ThumbnailFile" class="form-label">썸네일 교체 (선택)</label>
+      <input asp-for="ThumbnailFile" type="file" accept="image/*" class="form-control" />
+    </div>
+
+    @* ---- 기존 이미지 삭제 ---- *@
+    @if (beforeImages.Any())
+    {
+      <div class="mb-3">
+        <label class="form-label">기존 시공 전 사진</label>
+        <div class="d-flex flex-wrap gap-2">
+          @foreach (var img in beforeImages)
+          {
+            <div class="text-center">
+              <img src="@img.ImagePath" class="thumb-preview" />
+              <form asp-action="DeleteImage" method="post" class="mt-1" onsubmit="return confirm('삭제하시겠습니까?');">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="imageId" value="@img.Id" />
+                <input type="hidden" name="workCaseId" value="@Model.Id" />
+                <button type="submit" class="btn btn-xs btn-outline-danger" style="font-size:12px;padding:1px 8px;">삭제</button>
+              </form>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    @if (afterImages.Any())
+    {
+      <div class="mb-3">
+        <label class="form-label">기존 시공 후 사진</label>
+        <div class="d-flex flex-wrap gap-2">
+          @foreach (var img in afterImages)
+          {
+            <div class="text-center">
+              <img src="@img.ImagePath" class="thumb-preview" />
+              <form asp-action="DeleteImage" method="post" class="mt-1" onsubmit="return confirm('삭제하시겠습니까?');">
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="imageId" value="@img.Id" />
+                <input type="hidden" name="workCaseId" value="@Model.Id" />
+                <button type="submit" class="btn btn-xs btn-outline-danger" style="font-size:12px;padding:1px 8px;">삭제</button>
+              </form>
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label asp-for="BeforeImages" class="form-label">시공 전 사진 추가</label>
+        <input asp-for="BeforeImages" type="file" accept="image/*" multiple class="form-control" />
+      </div>
+      <div class="col-md-6 mb-3">
+        <label asp-for="AfterImages" class="form-label">시공 후 사진 추가</label>
+        <input asp-for="AfterImages" type="file" accept="image/*" multiple class="form-control" />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label asp-for="SortOrder" class="form-label"></label>
+        <input asp-for="SortOrder" class="form-control" />
+      </div>
+      <div class="col-md-6 mb-3 d-flex align-items-end">
+        <div class="form-check">
+          <input asp-for="IsPublished" class="form-check-input" />
+          <label asp-for="IsPublished" class="form-check-label">공개</label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">저장</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">취소</a>
+  </form>
+</div>

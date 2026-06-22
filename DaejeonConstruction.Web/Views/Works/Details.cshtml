@@ -1,0 +1,51 @@
+@model WorkCase
+@{
+    ViewData["Title"] = Model.Title;
+    var beforeImages = Model.Images.Where(i => i.ImageType == WorkImageType.Before).OrderBy(i => i.SortOrder).ToList();
+    var afterImages = Model.Images.Where(i => i.ImageType == WorkImageType.After).OrderBy(i => i.SortOrder).ToList();
+    var galleryImages = Model.Images.Where(i => i.ImageType == WorkImageType.Gallery).OrderBy(i => i.SortOrder).ToList();
+}
+
+<section class="section works">
+  <div class="container">
+    <div class="title-row">
+      <h2>[@Model.Category.ToKorean()] @Model.Title</h2>
+      <a asp-action="Index" class="outline-btn">← 목록으로</a>
+    </div>
+
+    @if (!string.IsNullOrWhiteSpace(Model.Location))
+    {
+      <p class="notice">시공지역: @Model.Location</p>
+    }
+    @if (!string.IsNullOrWhiteSpace(Model.Description))
+    {
+      <p style="color:#394553; line-height:1.75; margin-bottom:30px;">@Model.Description</p>
+    }
+
+    @if (beforeImages.Count > 0 || afterImages.Count > 0)
+    {
+      <h3 style="margin-bottom:14px;">시공 전 / 후</h3>
+      <div class="gallery" style="margin-bottom:36px;">
+        @foreach (var img in beforeImages)
+        {
+          <div class="work-item" style="background-image:url('@img.ImagePath');"><span>시공 전</span></div>
+        }
+        @foreach (var img in afterImages)
+        {
+          <div class="work-item after" style="background-image:url('@img.ImagePath');"><span>시공 후</span></div>
+        }
+      </div>
+    }
+
+    @if (galleryImages.Count > 0)
+    {
+      <h3 style="margin-bottom:14px;">현장 사진</h3>
+      <div class="gallery">
+        @foreach (var img in galleryImages)
+        {
+          <div class="work-item" style="background-image:url('@img.ImagePath');"></div>
+        }
+      </div>
+    }
+  </div>
+</section>

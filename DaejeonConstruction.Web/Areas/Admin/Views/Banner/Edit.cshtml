@@ -1,0 +1,63 @@
+@model BannerFormViewModel
+@{
+    ViewData["Title"] = "배너 수정";
+}
+
+<h2 class="mb-4">배너 수정</h2>
+
+<div class="card p-4" style="max-width:640px;">
+  <form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data">
+    @Html.AntiForgeryToken()
+    <input type="hidden" asp-for="Id" />
+    <div asp-validation-summary="All" class="text-danger small mb-2"></div>
+
+    @if (!string.IsNullOrEmpty(Model.ExistingImagePath))
+    {
+      <div class="mb-3">
+        <img src="@Model.ExistingImagePath" class="thumb-preview" style="width:160px;height:110px;" />
+      </div>
+    }
+
+    <div class="mb-3">
+      <label asp-for="Eyebrow" class="form-label"></label>
+      <input asp-for="Eyebrow" class="form-control" />
+    </div>
+    <div class="mb-3">
+      <label asp-for="Title" class="form-label"></label>
+      <input asp-for="Title" class="form-control" />
+    </div>
+    <div class="mb-3">
+      <label asp-for="SubText" class="form-label"></label>
+      <input asp-for="SubText" class="form-control" />
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label asp-for="ButtonText" class="form-label"></label>
+        <input asp-for="ButtonText" class="form-control" />
+      </div>
+      <div class="col-md-6 mb-3">
+        <label asp-for="ButtonLink" class="form-label"></label>
+        <input asp-for="ButtonLink" class="form-control" />
+      </div>
+    </div>
+    <div class="mb-3">
+      <label asp-for="ImageFile" class="form-label">이미지 교체 (선택)</label>
+      <input asp-for="ImageFile" type="file" accept="image/*" class="form-control" />
+    </div>
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label asp-for="SortOrder" class="form-label"></label>
+        <input asp-for="SortOrder" class="form-control" />
+      </div>
+      <div class="col-md-6 mb-3 d-flex align-items-end">
+        <div class="form-check">
+          <input asp-for="IsActive" class="form-check-input" />
+          <label asp-for="IsActive" class="form-check-label"></label>
+        </div>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">저장</button>
+    <a asp-action="Index" class="btn btn-outline-secondary">취소</a>
+  </form>
+</div>

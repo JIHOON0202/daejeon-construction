@@ -1,0 +1,90 @@
+@model EstimateRequest
+@{
+    ViewData["Title"] = "견적문의 상세";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h2 class="m-0">견적문의 상세</h2>
+  <a asp-action="Index" class="btn btn-outline-secondary">← 목록으로</a>
+</div>
+
+<div class="row g-4">
+  <div class="col-md-7">
+    <div class="card p-4">
+      <h5 class="mb-3">문의 내용</h5>
+      <table class="table table-borderless mb-0">
+        <tbody>
+          <tr>
+            <th style="width:110px;">성함</th>
+            <td>@Model.Name</td>
+          </tr>
+          <tr>
+            <th>연락처</th>
+            <td><a href="tel:@Model.Phone">@Model.Phone</a></td>
+          </tr>
+          <tr>
+            <th>시공지역</th>
+            <td>@Model.Area</td>
+          </tr>
+          <tr>
+            <th>시공품목</th>
+            <td>@Model.ServiceType</td>
+          </tr>
+          <tr>
+            <th>접수일시</th>
+            <td>@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+          </tr>
+          <tr>
+            <th>상태</th>
+            <td><span class="@Model.Status.ToBadgeClass()">@Model.Status.ToKorean()</span></td>
+          </tr>
+          <tr>
+            <th>문의내용</th>
+            <td><pre style="white-space:pre-wrap; font-family:inherit; margin:0;">@Model.Message</pre></td>
+          </tr>
+        </tbody>
+      </table>
+
+      @if (Model.Files.Any())
+      {
+        <hr />
+        <h6>첨부파일</h6>
+        <div class="d-flex flex-wrap gap-2">
+          @foreach (var file in Model.Files)
+          {
+            <a href="@file.FilePath" target="_blank">
+              <img src="@file.FilePath" class="thumb-preview" style="width:120px;height:90px;" title="@file.FileName" />
+            </a>
+          }
+        </div>
+      }
+    </div>
+  </div>
+
+  <div class="col-md-5">
+    <div class="card p-4">
+      <h5 class="mb-3">상태 변경</h5>
+      <form asp-action="ChangeStatus" method="post">
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@Model.Id" />
+
+        <div class="mb-3">
+          <label class="form-label">처리 상태</label>
+          <select name="status" class="form-select">
+            @foreach (EstimateStatus s in Enum.GetValues(typeof(EstimateStatus)))
+            {
+              <option value="@s" @(Model.Status == s ? "selected" : "")>@s.ToKorean()</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">관리자 메모</label>
+          <textarea name="adminMemo" class="form-control" rows="5">@Model.AdminMemo</textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">저장</button>
+      </form>
+    </div>
+  </div>
+</div>

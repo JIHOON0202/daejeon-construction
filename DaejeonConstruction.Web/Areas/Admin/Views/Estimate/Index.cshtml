@@ -1,0 +1,58 @@
+@model List<EstimateRequest>
+@{
+    ViewData["Title"] = "견적문의관리";
+    var filterStatus = ViewBag.FilterStatus as EstimateStatus?;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="m-0">견적문의관리</h2>
+</div>
+
+<div class="mb-3 d-flex gap-2">
+  <a asp-action="Index" class="btn btn-sm @(filterStatus == null ? "btn-primary" : "btn-outline-secondary")">전체</a>
+  <a asp-action="Index" asp-route-status="Received"    class="btn btn-sm @(filterStatus == EstimateStatus.Received    ? "btn-secondary" : "btn-outline-secondary")">접수</a>
+  <a asp-action="Index" asp-route-status="InProgress"  class="btn btn-sm @(filterStatus == EstimateStatus.InProgress  ? "btn-warning"   : "btn-outline-secondary")">상담중</a>
+  <a asp-action="Index" asp-route-status="Completed"   class="btn btn-sm @(filterStatus == EstimateStatus.Completed   ? "btn-success"   : "btn-outline-secondary")">완료</a>
+</div>
+
+<div class="card p-3">
+  <table class="table table-hover align-middle">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>접수일시</th>
+        <th>성함</th>
+        <th>연락처</th>
+        <th>시공지역</th>
+        <th>시공품목</th>
+        <th>상태</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      @foreach (var e in Model)
+      {
+        <tr>
+          <td>@e.Id</td>
+          <td>@e.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+          <td>@e.Name</td>
+          <td>@e.Phone</td>
+          <td>@e.Area</td>
+          <td>@e.ServiceType</td>
+          <td><span class="@e.Status.ToBadgeClass()">@e.Status.ToKorean()</span></td>
+          <td>
+            <a asp-action="Details" asp-route-id="@e.Id" class="btn btn-sm btn-outline-primary">상세</a>
+            <form asp-action="Delete" asp-route-id="@e.Id" method="post" class="d-inline" onsubmit="return confirm('삭제하시겠습니까?');">
+              @Html.AntiForgeryToken()
+              <button type="submit" class="btn btn-sm btn-outline-danger">삭제</button>
+            </form>
+          </td>
+        </tr>
+      }
+      @if (!Model.Any())
+      {
+        <tr><td colspan="8" class="text-center text-muted py-4">문의 내역이 없습니다.</td></tr>
+      }
+    </tbody>
+  </table>
+</div>
